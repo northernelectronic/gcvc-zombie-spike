@@ -1,0 +1,79 @@
+# Codemagic cloud build (macOS) for GCVC United Zombie Spike.
+# Lets us build the iPhone app and send it to TestFlight without owning a Mac.
+# One-time setup (see BUILD.md "iPhone / TestFlight"):
+#   1. Apple Developer Program membership ($99 US/yr) + app record in App Store Connect
+#      with bundle ID com.moncada.gcvczombies.
+#   2. App Store Connect API key (Users and Access > Integrations > App Store Connect API, role "App Manager")
+#      added to Codemagic: Team settings > Integrations > Developer Portal, named exactly: GCVCZombiesASC
+#   3. In Codemagic: Team settings > Code signing identities > generate/fetch an "Apple Distribution" certificate
+#      and an App Store provisioning profile for com.moncada.gcvczombies (Codemagic can create both via the API key).
+#   4. Put the app's numeric Apple ID (App Store Connect > App Information) in APP_STORE_APPLE_ID below.
+workflows:
+  ios-testflight:
+    name: iOS - build and upload to TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: GCVCZombiesASC
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.moncada.gcvczombies
+      vars:
+        XCODE_PROJECT: "ios/App/App.xcodeproj"
+        XCODE_SCHEME: "App"
+        APP_STORE_APPLE_ID: "0000000000"   # <-- replace with the app's numeric Apple ID
+      node: 22
+      xcode: latest
+    triggering:
+      events: [push]
+      branch_patterns:
+        - pattern: main
+    scripts:
+      - name: Install and build web game
+        script: |
+          npm ci
+          npm run build
+      - name: Sync Capacitor iOS project
+        script: npx cap sync ios
+      - name: Apply signing profiles
+        script: xcode-project use-profiles --project "$XCODE_PROJECT"
+      - name: Bump build number
+        script: |
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+          cd ios/App && agvtool new-version -all $((LATEST + 1))
+      - name: Build signed .ipa
+        script: xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        # beta_groups:            # optional: an external TestFlight group name, e.g. "Family"
+        #   - Family
+
+  android-release:
+    name: Android - signed AAB/APK (optional; can also be built on the Linux box)
+    instance_type: linux_x2
+    max_build_duration: 45
+    environment:
+      android_signing:
+        - gcvczombies_upload_key   # upload keys/gcvczombies-release.jks to Codemagic under this reference name
+      node: 22
+      java: 21
+    scripts:
+      - npm ci && npm run build && npx cap sync android
+      - name: Build
+        script: |
+          cat > android/keystore.properties <<PROPS
+          storeFile=$CM_KEYSTORE_PATH
+          storePassword=$CM_KEYSTORE_PASSWORD
+          keyAlias=$CM_KEY_ALIAS
+          keyPassword=$CM_KEY_PASSWORD
+          PROPS
+          cd android && ./gradlew bundleRelease assembleRelease
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+      - android/app/build/outputs/**/*.apk

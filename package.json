@@ -1,0 +1,30 @@
+{
+  "name": "gcvc-zombie-spike",
+  "version": "1.0.0",
+  "description": "GCVC United Zombie Spike - 3D lane-defense spiking game",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node tools/test.mjs",
+    "cap:sync": "vite build && npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/ios": "^8.6.2",
+    "@fontsource/bebas-neue": "^5.2.0",
+    "@fontsource/oswald": "^5.2.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.2",
+    "@gltf-transform/cli": "^4.2.0",
+    "puppeteer-core": "^25.18.1",
+    "vite": "^8.3.8"
+  }
+}

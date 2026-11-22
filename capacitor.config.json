@@ -1,0 +1,8 @@
+{
+  "appId": "com.moncada.gcvczombies",
+  "appName": "Zombie Spike",
+  "webDir": "dist",
+  "backgroundColor": "#0b0d0c",
+  "android": { "backgroundColor": "#0b0d0c" },
+  "ios": { "backgroundColor": "#0b0d0c", "contentInset": "never" }
+}

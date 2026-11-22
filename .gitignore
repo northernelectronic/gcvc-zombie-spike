@@ -1,0 +1,11 @@
+node_modules/
+dist/
+keys/
+android/keystore.properties
+android/local.properties
+*.jks
+*.keystore
+*.apk
+*.aab
+shots/
+tools/*.log

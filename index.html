@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="theme-color" content="#0b0d0c" />
+<title>GCVC United Zombie Spike</title>
+<link rel="icon" href="./icon-192.png" />
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="apple-touch-icon" href="./icon-192.png" />
+<link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+<div id="game"></div>
+<div id="ui">
+  <div id="loading" class="screen carbon"><img src="./logo-title.jpg" class="logo" alt="GCVC United" /><div class="bar"><i id="loadBar"></i></div><div class="tip">Waking the zombies…</div></div>
+
+  <div id="hud" class="hidden">
+    <div id="topbar">
+      <div id="lives"></div>
+      <div id="scoreBox"><b id="score">0</b><span id="waveLbl">WAVE 1</span></div>
+      <button id="pauseBtn" class="round" aria-label="Pause">II</button>
+    </div>
+    <div id="combo"><div id="comboFill"></div><span id="comboTxt">COMBO 0</span><b id="mult">x1</b></div>
+    <div id="power" class="hidden"></div>
+    <div id="lanes"><i data-l="0">↖</i><i data-l="1">⬆</i><i data-l="2">↗</i></div>
+  </div>
+  <div id="prompt" class="hidden"></div>
+  <div id="banner" class="hidden"></div>
+  <div id="pop" class="hidden"></div>
+  <div id="flash"></div>
+
+  <div id="menu" class="screen hidden">
+    <div class="menuTop">
+      <img src="./logo-title.jpg" class="logo small" alt="GCVC United" />
+      <div class="zs-title"><span>ZOMBIE</span><span>SPIKE</span></div>
+    </div>
+    <div class="menuBottom">
+      <div class="stats"><div>🏆 Best <b id="mBest">0</b></div><div>🌊 Wave <b id="mWave">0</b></div></div>
+      <button id="playBtn" class="big">▶ PLAY</button>
+      <div class="row"><button id="howBtn" class="mid">❓ How to play</button></div>
+      <div class="row"><button id="muteBtn" class="small">🔊 Sound</button><button id="gfxBtn" class="small">✨ Auto</button></div>
+    </div>
+  </div>
+
+  <div id="tut" class="screen carbon hidden">
+    <h2>HOW TO PLAY</h2>
+    <div class="cards">
+      <div class="card"><div class="ic">🧟</div><div><b>STOP THE ZOMBIES</b>Zombie volleyball players shuffle at the net in 3 lanes. If one reaches the net you lose a ❤️.</div></div>
+      <div class="card"><div class="ic">🏐</div><div><b>NON-STOP SETS</b>Your setter keeps feeding you balls. You jump by yourself. <u>Swipe up when the ring turns gold</u> at the top of the jump.</div></div>
+      <div class="card"><div class="ic">↖⬆↗</div><div><b>PICK A LANE</b><u>Swipe up-left</u> = left lane, <u>straight up</u> (or tap) = middle, <u>up-right</u> = right lane.</div></div>
+      <div class="card"><div class="ic">💥</div><div><b>TIMING</b>PERFECT = huge hit + knockback. Too early = net. Too late = out. Hit in a row to grow your combo.</div></div>
+      <div class="card"><div class="ic">🎁</div><div><b>POWER-UPS</b>Zombies sometimes drop 🔥 fireballs, ✨ triple spikes, ❄️ freeze and ❤️ hearts.</div></div>
+    </div>
+    <button id="tutGo" class="big">LET'S SPIKE</button>
+  </div>
+
+  <div id="pause" class="screen carbon hidden">
+    <h2>PAUSED</h2>
+    <button id="resumeBtn" class="big">▶ Resume</button>
+    <button id="pHowBtn" class="mid">❓ How to play</button>
+    <button id="quitBtn" class="mid">🏠 Quit</button>
+  </div>
+
+  <div id="over" class="screen hidden">
+    <h2>GAME OVER</h2>
+    <div class="final"><span>SCORE</span><b id="oScore">0</b></div>
+    <div id="oBest" class="earn"></div>
+    <div id="oStats" class="ostats"></div>
+    <button id="againBtn" class="big">↻ Play again</button>
+    <div class="row"><button id="homeBtn" class="mid">🏠 Home</button></div>
+  </div>
+</div>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
